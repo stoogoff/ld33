@@ -1,0 +1,23 @@
+{
+  "name": "LD33",
+  "version": "1.0.0",
+  "description": "LD33 Competition Entry",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "gulp": "^3.8.11",
+    "gulp-sass": "^1.3.3",
+    "gulp-requirejs": "^0.1.3"
+  },
+  "devDependencies": {
+    "gulp-rename": "^1.2.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ludum dare",
+    "ld33"
+  ],
+  "author": "Stoo Goff",
+  "license": "MIT"
+}
