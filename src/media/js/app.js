@@ -6,7 +6,8 @@ define(function(require) {
 
 	// Game States
 	game.state.add("preload", require("./screens/preload"));
-	game.state.add("menu", require("./screens/menu"));
+	game.state.add("start", require("./screens/menus").Start);
+	game.state.add("gameover", require("./screens/menus").GameOver);
 	game.state.add("play", require("./screens/game-play"));
 
 	game.state.start("preload");

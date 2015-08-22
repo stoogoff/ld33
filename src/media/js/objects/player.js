@@ -2,10 +2,10 @@ define(function(require) {
 	// imports
 	var inherits = require("../utils/inherits");
 	var constants = require("../utils/constants");
-	var _ = require("underscore");
+	var Interval = require("../utils/interval");
 
 	// module vars
-
+	var jumpInterval = new Interval(2000);
 
 	var Player = function(game, x, y, frame) {
 		// phaser related stuff
@@ -18,7 +18,7 @@ define(function(require) {
 		//this.animations.add("walk", null, 10);
 
 		this.body.allowRotation = false;
-		this.body.collideWorldBounds = true;
+		this.body.collideWorldBounds = false;
 		this.body.gravity.y = constants.GRAVITY_PLAYER;
 		this.anchor.setTo(0.5, 1);
 	};
@@ -26,7 +26,7 @@ define(function(require) {
 	inherits(Player, Phaser.Sprite);
 
 	// jump the player and change the animation
-	Player.prototype.jump = function() {
+	Player.prototype.jump = function(time) {
 		if(this.body.velocity.y == 0) {
 			this.body.velocity.y = -constants.MAX_JUMP;
 			//this.setAnimation(Player.STATE.JUMPING);

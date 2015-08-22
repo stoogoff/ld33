@@ -79,10 +79,17 @@ define(function(require) {
 
 		// handle jump
 		if(jump.isDown) {
+			// TODO jump shakes the camera
 			player.jump();
 		}
 
 		// TODO handle player death
+		console.log("player.x = " + player.y)
+		console.log("constants.SCREEN_HEIGHT = " + (constants.SCREEN_HEIGHT))
+
+		if(player.y > constants.SCREEN_HEIGHT) {
+			this.game.state.start("gameover");
+		}
 	};
 
 	GamePlay.prototype.render = function() {

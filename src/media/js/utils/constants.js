@@ -23,6 +23,18 @@ define(function(require) {
 		BACKGROUND_COLOUR: "rgba(0, 0, 0, 0.9)",
 
 		// target keys
-		PLAYER: "player"
+		PLAYER: "player",
+
+		// font styles
+		STYLE_TITLE: {
+			font: "65px Arial",
+			fill: "#ffffff",
+			align: "center"
+		},
+		STYLE_BODY: {
+			font: "16px Arial",
+			fill: "#ffffff",
+			align: "left"
+		}
 	};
 });
