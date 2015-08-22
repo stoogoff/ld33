@@ -1,12 +1,23 @@
 
 define(function(require) {
 	return {
-		SCREEN_WIDTH: 800,
-		SCREEN_HEIGHT: 800,
+		// dimensions
+		SCREEN_WIDTH: 956,
+		SCREEN_HEIGHT: 350,
 
-		// world parameters
-		WORLD_WIDTH: 1600,
-		WORLD_HEIGHT: 1600,
+		TILE_WIDTH: 160,
+		TILE_HEIGHT: 160,
+
+		PLAYER_WIDTH: 120,
+		PLAYER_HEIGHT: 120,
+
+		//
+		MAX_JUMP: 275,
+		GRAVITY_WORLD: 400,
+		GRAVITY_PLAYER: 400,
+
+		SPEED_START: 140,
+		SPEED_INCREMENT: 40,
 
 		// HUD
 		BACKGROUND_COLOUR: "rgba(0, 0, 0, 0.9)",

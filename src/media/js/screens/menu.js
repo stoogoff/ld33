@@ -7,9 +7,9 @@ define(function(require) {
 	Menu.prototype = {
 		create: function() {
 			// start music
-			var music = this.game.add.audio("doom-upon-us", 1, true);
+			//var music = this.game.add.audio("doom-upon-us", 1, true);
 
-			music.play("", 0, 1, true);
+			//music.play("", 0, 1, true);
 
 			//this.game.stage.background = this.game.add.image(0, 0, 'sea');
 
@@ -19,7 +19,7 @@ define(function(require) {
 				"Play"
 			];
 
-			this.titleText = this.game.add.text(this.game.world.centerX, 50, "Title", { font: "65px Arial", fill: "#ffffff", align: "center" });
+			this.titleText = this.game.add.text(this.game.world.centerX, 50, "Trollhammer", { font: "65px Arial", fill: "#ffffff", align: "center" });
 			this.titleText.anchor.setTo(0.5, 0);
 
 			this.infoText = this.game.add.text(this.game.world.centerX, 150, message.join("\n\n"), { font: "16px Arial", fill: "#ffffff", align: "left"});

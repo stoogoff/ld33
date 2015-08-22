@@ -10,7 +10,7 @@ define(function(require) {
 
 			// load graphics
 			var keys = [
-				"background", "cave"
+				"troll", "person", "ground", "hut"
 			];
 
 			keys.forEach(function(key) {
@@ -18,13 +18,13 @@ define(function(require) {
 			});
 
 			// animations
-			this.load.spritesheet("alien", "media/img/alien.png", 24, 24);
+			//this.load.spritesheet("alien", "media/img/alien.png", 24, 24);
 
 			// load json data
-			this.load.json("objects", "media/data/objects.json");
+			//this.load.json("objects", "media/data/objects.json");
 
 			// load audio
-			this.load.audio("doom-upon-us", ["media/audio/doom-upon-us.mp3", "media/audio/doom-upon-us.ogg"]);
+			//this.load.audio("doom-upon-us", ["media/audio/doom-upon-us.mp3", "media/audio/doom-upon-us.ogg"]);
 		},
 		create: function() {
 			this.game.state.start("menu");
