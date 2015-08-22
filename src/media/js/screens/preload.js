@@ -9,7 +9,7 @@ define(function(require) {
 
 		// load graphics
 		var keys = [
-			"troll", "person", "ground", "hut"
+			"troll", "person", "ground", "hut", "villager"
 		];
 
 		keys.forEach(function(key) {

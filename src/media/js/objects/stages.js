@@ -2,6 +2,7 @@
 define(function(require) {
 	// imports
 	var inherits = require("../utils/inherits");
+	var constants = require("../utils/constants");
 	var Interval = require("../utils/interval");
 
 	// 'abstract' class
@@ -10,7 +11,7 @@ define(function(require) {
 		this.updates = {};
 
 		this.started = false;
-		this.intervals.started = new Interval(3000);
+		this.intervals.started = new Interval(1000);//3000);
 
 		this.chasmChance = 0;
 	};
@@ -28,15 +29,27 @@ define(function(require) {
 		}
 	};
 
+	// check to see if a timer has updated
 	Stage.prototype.next = function(interval) {
 		return this.updates[interval];
 	};
 
 	// methods for determining if the game screen should add objects
-	/*Stage.prototype.addVillager = function() {
-		// this may not be right as villagers should *only* appear from huts
-		return // number to add, position is up to caller
-	};*/
+
+	Stage.prototype.getEnemy = function(hut, player) {
+		// villagers spawn if Troll is within x of hut
+		// a villager can spawn each second
+		// the chance of a villager spawning goes down every time a villager spawns
+		// once the hut is passed Troll no more villagers spawn
+		var distance = hut.x - player.x;
+
+		if(distance < 0) {
+			return false;
+		}
+
+		// TODO different types of villager depending on stage
+		return distance <= constants.FEAR_RANGE ? "Villager" : null;
+	};
 	Stage.prototype.addHut = function() {
 		return false;
 	};
@@ -45,11 +58,10 @@ define(function(require) {
 	Stage.prototype.addChasm = function() {
 		return Math.random() <= this.chasmChance;
 	};
-	/*Stage.prototype.addEnemy = function() {
-		return // enemy class to add or null
-	};*/
 
-	// concrete instances
+	// CONCRETE INSTANCES
+
+	// basic village stage which starts everything off
 	var VillageStage = function() {
 		Stage.call(this);
 
@@ -88,6 +100,26 @@ define(function(require) {
 
 		return this.next("hut") && Math.random() <= this.hutChance;
 	};
+
+	Stage.prototype.getEnemy = function(hut, player) {
+		// villagers spawn if Troll is within x of hut
+		// a villager can spawn each second
+		// the chance of a villager spawning goes down every time a villager spawns
+		// once the hut is passed Troll no more villagers spawn
+		var distance = hut.x - player.x;
+
+		if(distance < 0) {
+			return false;
+		}
+
+		// TODO different types of villager depending on stage
+		return distance <= constants.FEAR_RANGE ? "Villager" : null;
+	};
+
+
+	////////
+	// TODO
+	////////
 
 	var PitchforkStage = function() {
 		Stage.call(this);

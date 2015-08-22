@@ -11,19 +11,21 @@ define(function(require) {
 		PLAYER_WIDTH: 120,
 		PLAYER_HEIGHT: 120,
 
-		//
-		MAX_JUMP: 275,
+		// game constants
+		FEAR_RANGE: 400,
+		JUMP_SMALL: 275,
+		JUMP_FULL: 400,
 		GRAVITY_WORLD: 400,
 		GRAVITY_PLAYER: 400,
 
-		SPEED_START: 140,
+		SPEED_START: 180,
 		SPEED_INCREMENT: 40,
 
-		// HUD
-		BACKGROUND_COLOUR: "rgba(0, 0, 0, 0.9)",
+		SCORE_KILL: 10,
+		SCORE_FALL: 1,
 
-		// target keys
-		PLAYER: "player",
+		// HUD ???
+		BACKGROUND_COLOUR: "rgba(0, 0, 0, 0.9)",
 
 		// font styles
 		STYLE_TITLE: {
@@ -35,6 +37,10 @@ define(function(require) {
 			font: "16px Arial",
 			fill: "#ffffff",
 			align: "left"
+		},
+		STYLE_HUD: {
+			font: "bold 16px Arial",
+			fill: "#114ea7"
 		}
 	};
 });

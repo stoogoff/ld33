@@ -10,9 +10,15 @@ define(function(require) {
 		Phaser.Group.call(this, game, parent);
 
 		this.enableBody = true;
+		this.speed = constants.SPEED_START;
 	};
 
 	inherits(Parallax, Phaser.Group);
+
+	// increase speed
+	Parallax.prototype.faster = function(adjust) {
+		this.speed += adjust;
+	};
 
 	// return the furthest right ground object
 	Parallax.prototype.getLast = function() {
@@ -34,9 +40,9 @@ define(function(require) {
 
 	Parallax.prototype.update = function() {
 		this.forEach(function(child) {
-			child.body.velocity.x = -this.game.speed;
+			child.body.velocity.x = -this.speed;
 
-			if(child.x + constants.TILE_WIDTH < 0) {
+			if(child.x + child.width < 0) {
 				this.onloop(child);
 			}
 		}, this, true);

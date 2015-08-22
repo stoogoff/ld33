@@ -4,8 +4,15 @@ define(function(require) {
 	var constants = require("../utils/constants");
 	var Interval = require("../utils/interval");
 
-	// module vars
-	var jumpInterval = new Interval(2000);
+	// jump related
+	var jumpInterval = new Interval(3000);
+	var canPowerJump = true;
+	var Jumping = {
+		"None": 0,
+		"Jump": 1,
+		"Power": 2
+	};
+	var jumpState = Jumping.None;
 
 	var Player = function(game, x, y, frame) {
 		// phaser related stuff
@@ -20,38 +27,54 @@ define(function(require) {
 		this.body.allowRotation = false;
 		this.body.collideWorldBounds = false;
 		this.body.gravity.y = constants.GRAVITY_PLAYER;
+		this.body.checkCollision.left = false;
+		this.body.checkCollision.right = false;
 		this.anchor.setTo(0.5, 1);
 	};
 
 	inherits(Player, Phaser.Sprite);
 
 	// jump the player and change the animation
-	Player.prototype.jump = function(time) {
-		if(this.body.velocity.y == 0) {
-			this.body.velocity.y = -constants.MAX_JUMP;
-			//this.setAnimation(Player.STATE.JUMPING);
+	Player.prototype.jump = function() {
+		if(jumpState != Jumping.None) {
+			return;
 		}
 
-		// TODO if the player is behind their regular y position then they've tripped
-		// TODO jumping shakes the ground, slowing the villagers but also slows the troll
-
-		/*else if(this.velocity.y > 0 && !this.doubleJump) {
-			this.doubleJump = true;
-			this.velocity.y = -Player.MAX_VELOCITY / 2;
-		}*/
-
-		/*this.body.velocity.x = vector.x * SPEED;
-		this.body.velocity.y = vector.y * SPEED;
-
-		if(vector.x !== 0 || vector.y !== 0) {
-			//this.animations.play("walk");
-
+		if(canPowerJump) {
+			jumpState = Jumping.Power;
+			this.body.velocity.y = -constants.JUMP_FULL;
 		}
 		else {
-			//this.animations.stop("walk");
-			this.frame = 0;
-		}*/
+			jumpState = Jumping.Jump;
+			this.body.velocity.y = -constants.JUMP_SMALL;
+		}
+
+		// TODO revert to jumping animation
 	};
+
+
+	Player.prototype.update = function() {
+		// were jumping, have now landed
+		if(jumpState != Jumping.None && this.body.velocity.y == 0) {
+			if(jumpState == Jumping.Power) {
+				this.onpowerlanding();
+			}
+
+			jumpState = Jumping.None;
+			canPowerJump = false;
+			jumpInterval.reset();
+
+			// TODO revert to walking animation
+		}
+
+		var elapsed = this.game.time.elapsed;
+
+		if(jumpState == Jumping.None && jumpInterval.next(elapsed)) {
+			canPowerJump = true;
+		}
+	};
+
+	Player.prototype.onpowerlanding = function() {};
 
 	Player.prototype.isDead = function() {
 		return false;
