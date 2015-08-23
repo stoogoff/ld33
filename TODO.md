@@ -12,8 +12,11 @@ Troll jump:
 
 DONE Spawn villagers
 DONE Troll death if fall down chasm
-Troll smash!
+DONE Troll smash!
 Fix background (and maybe HUD during power smash)
+Sound effects
+Pass score or something to the end screen
+Make game play more interesting
 
 Artwork:
 

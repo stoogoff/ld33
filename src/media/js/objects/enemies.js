@@ -5,6 +5,7 @@ define(function(require) {
 	var inherits = require("../utils/inherits");
 	var constants = require("../utils/constants");
 	var Parallax = require("./parallax");
+	var _ = require("underscore");
 
 	// graphics
 	var gfx = ["black", "brown", "red", "white", "yellow"];
@@ -30,6 +31,16 @@ define(function(require) {
 	};
 
 	inherits(Villager, Phaser.Sprite);
+
+	Villager.prototype.smashed = function(complete) {
+		// squish enemy before adding the splat and before removing the enemy completely
+		var tween = this.game.add.tween(this).to({ height: 0 }, 180, Phaser.Easing.Bounce.Out, true);
+
+		tween.onComplete.addOnce(_.bind(function() {
+			complete(this);
+			this.destroy();
+		}, this));
+	};
 
 	/*var PitchforkVillager = function(game, x, y) {
 		Villager.call(this, game, x, y);
@@ -77,6 +88,16 @@ define(function(require) {
 	Enemies.prototype.slow = function() {
 		this.speedModifier = -5;
 		this.speedTimer.reset();
+	};
+
+	Enemies.prototype.hitTest = function(bounds) {
+		this.forEach(function(child) {
+			if(Phaser.Rectangle.intersects(bounds, child.getBounds())) {
+				child.smashed(_.bind(function() {
+					this.remove(child);
+				}, this));
+			}
+		}, this, true);
 	};
 
 	// methods for adding different enemy types

@@ -5,6 +5,9 @@ define(function(require) {
 	var Interval = require("../utils/interval");
 	var _ = require("underscore");
 
+	// hammer area
+	var HAMMER_SIZE = 20;
+
 	// jump related
 	var jumpInterval = new Interval(3000);
 	var canPowerJump = true;
@@ -76,6 +79,14 @@ define(function(require) {
 
 			this.actionState = PlayerState.None;
 		}, this));
+	};
+
+	Player.prototype.smashCollision = function() {
+		if(this.actionState == PlayerState.Smash) {
+			return new Phaser.Rectangle(this.x +this.width - HAMMER_SIZE, this.y - HAMMER_SIZE, HAMMER_SIZE, HAMMER_SIZE);
+		}
+
+		return null;
 	};
 
 	Player.prototype.update = function() {

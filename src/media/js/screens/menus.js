@@ -16,9 +16,9 @@ define(function(require) {
 
 	Menu.prototype.create = function() {
 		// start music
-		//var music = this.game.add.audio("doom-upon-us", 1, true);
-
-		//music.play("", 0, 1, true);
+		this.music = this.game.add.audio("intro", 1, true);
+		//this.music.fadeIn(constants.MUSIC_FADE, true);
+		this.music.play("", 0, 1, true);
 
 		this.game.stage.backgroundColor = "black";
 		this.game.add.image(0, 0, "sky");
@@ -52,6 +52,12 @@ define(function(require) {
 		if(this.game.input.activePointer.justPressed()) {
 			this.game.state.start("play");
 		}
+	};
+
+	Menu.prototype.shutdown = function() {
+		console.log("Menu.shutdown")
+		//this.music.fadeOut(constants.MUSIC_FADE);
+		this.music.stop();
 	};
 
 	var Start = function() {

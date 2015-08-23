@@ -31,11 +31,19 @@ define(function(require) {
 	// keyboard
 	var jump, smash;
 
+	// audio
+	var music;
+
 	var GamePlay = function() {
 		Phaser.State.call(this);
 	};
 
 	GamePlay.prototype.create = function() {
+		// start music
+		music = this.game.add.audio("theme", 1, true);
+		//music.fadeIn(constants.MUSIC_FADE, true);
+		music.play("", 0, 1, true);
+
 		// basic world stuff
 		this.game.stage.backgroundColor = "#05baf0";
 		//this.game.add.tileSprite(-PAD, -PAD, constants.SCREEN_WIDTH + PAD, constants.SCREEN_HEIGHT + PAD, "sky");
@@ -88,6 +96,7 @@ define(function(require) {
 
 		// set up the current stage
 		stage = new Stages.Village();
+		//stage = new Stages.Empty();
 
 		// set up player controls
 		jump  = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -119,19 +128,14 @@ define(function(require) {
 		this.physics.arcade.collide(enemies, ground);
 
 		// collisions between the player and the enemies
-		this.game.physics.arcade.collide(player, enemies, function(player, enemy) {
-			splats.addSplat(enemy.x);
+		this.game.physics.arcade.collide(player, enemies, this.customCollision, null, this);
 
-			// squish enemy before adding the splat and before removing the enemy completely
-			var tween = this.game.add.tween(enemy).to({ height: 0 }, 180, Phaser.Easing.Bounce.Out, true);
+		// collision between the player's hammer and the enemies
+		hitArea = player.smashCollision();
 
-			tween.onComplete.addOnce(function() {
-				enemies.remove(enemy);
-				enemy.destroy();
-			});
-
-			this.addScore(constants.SCORE_KILL);
-		}, null, this);
+		if(hitArea) {
+			enemies.hitTest(hitArea);
+		}
 
 		// STAGE ACTIVITY
 		var stageStarted = stage.started;
@@ -166,10 +170,7 @@ define(function(require) {
 
 		// stage wasn't started but now is and an enemy has been added, so increase the player speed
 		if(!stageStarted && stage.started && addedEnemy) {
-			enemies.faster(constants.SPEED_INCREMENT);
-			ground.faster(constants.SPEED_INCREMENT);
-			huts.faster(constants.SPEED_INCREMENT);
-			splats.faster(constants.SPEED_INCREMENT);
+			this.speedUp();
 		}
 
 		// SHAKE CAMERA
@@ -200,6 +201,30 @@ define(function(require) {
 		if(player.y > constants.SCREEN_HEIGHT) {
 			this.game.state.start("gameover");
 		}
+	};
+
+	GamePlay.prototype.speedUp = function() {
+		enemies.faster(constants.SPEED_INCREMENT);
+		ground.faster(constants.SPEED_INCREMENT);
+		huts.faster(constants.SPEED_INCREMENT);
+		splats.faster(constants.SPEED_INCREMENT);
+	};
+
+	GamePlay.prototype.customCollision = function(obj, enemy) {
+		splats.addSplat(enemy.x);
+
+		// squish enemy before adding the splat and before removing the enemy completely
+		enemy.smashed(function() {
+			enemies.remove(enemy);
+		});
+
+		this.addScore(constants.SCORE_KILL);
+	};
+
+	GamePlay.prototype.shutdown = function() {
+		console.log("GamePlay.shutdown")
+		//music.fadeOut(constants.MUSIC_FADE);
+		music.stop();
 	};
 
 	GamePlay.prototype.render = function() {

@@ -25,6 +25,8 @@ define(function(require) {
 		SCORE_KILL: 10,
 		SCORE_FALL: 1,
 
+		MUSIC_FADE: 1000,
+
 		// font styles
 		STYLE_TITLE: {
 			font: "65px Arial",

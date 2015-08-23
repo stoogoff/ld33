@@ -116,6 +116,13 @@ define(function(require) {
 		return distance <= constants.FEAR_RANGE ? "Villager" : null;
 	};
 
+	// Demo stage just spawns a succession of enemies
+	var EmptyStage = function() {
+		Stage.call(this);
+	};
+
+	inherits(EmptyStage, Stage);
+
 
 	/////////////////
 	// TODO
@@ -143,6 +150,7 @@ define(function(require) {
 		"Village": VillageStage,
 		"Pitchfork": PitchforkStage,
 		"Terrain": TerrainStage,
-		"Castle": CastleStage
+		"Castle": CastleStage,
+		"Empty": EmptyStage
 	};
 });
