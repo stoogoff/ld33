@@ -5,9 +5,11 @@ define(function(require) {
 	var Interval = require("../utils/interval");
 	var inherits = require("../utils/inherits");
 
+	// graphics
+	var gfx = ["hut1", "hut2", "hut1", "hut2", "hut3"];
+
 	var Hut = function(game, x, y) {
-		// phaser related stuff
-		Phaser.Sprite.call(this, game, x, y, "hut");
+		Phaser.Sprite.call(this, game, x, y, Phaser.ArrayUtils.getRandomItem(gfx));
 
 		// set physics and game specific stuff
 		game.physics.arcade.enable(this);

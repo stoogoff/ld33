@@ -46,8 +46,7 @@ define(function(require) {
 	// override update to move enemies at their actual speed rather than the world speed
 	Enemies.prototype.update = function() {
 		this.forEach(function(child) {
-			//child.body.velocity.x = child.speed * this.speedModifier;
-			child.body.velocity.x = -30;
+			child.body.velocity.x = child.speed * this.speedModifier;
 
 			// if child is out of bounds destroy it
 			if(child.x < 0 || child.y - child.height > constants.SCREEN_HEIGHT || child.x > constants.SCREEN_WIDTH) {
@@ -69,14 +68,16 @@ define(function(require) {
 
 	// reduce all enemies in the group to a speed of 1
 	Enemies.prototype.slow = function() {
-		this.speedModifier = -2;
+		this.speedModifier = -5;
 		this.speedTimer.reset();
 	};
 
 	// methods for adding different enemy types
 
 	Enemies.prototype.addVillager = function(x, y) {
-		this.add(new Villager(this.game, x, y));
+		if(this.children.length < constants.ENEMY_MAX) {
+			this.add(new Villager(this.game, x, y));
+		}
 	};
 
 	return Enemies;

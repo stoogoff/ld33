@@ -11,7 +11,7 @@ define(function(require) {
 		this.updates = {};
 
 		this.started = false;
-		this.intervals.started = new Interval(1000);//3000);
+		this.intervals.started = new Interval(3000);
 
 		this.chasmChance = 0;
 	};
@@ -117,9 +117,9 @@ define(function(require) {
 	};
 
 
-	////////
+	/////////////////
 	// TODO
-	////////
+	/////////////////
 
 	var PitchforkStage = function() {
 		Stage.call(this);

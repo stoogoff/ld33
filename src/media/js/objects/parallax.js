@@ -20,6 +20,10 @@ define(function(require) {
 		this.speed += adjust;
 	};
 
+	Parallax.prototype.stop = function() {
+		this.speed = 0;
+	};
+
 	// return the furthest right ground object
 	Parallax.prototype.getLast = function() {
 		var last = null;

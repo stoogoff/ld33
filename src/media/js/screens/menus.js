@@ -2,6 +2,9 @@
 define(function(require) {
 	var constants = require("../utils/constants");
 	var inherits = require("../utils/inherits");
+	var Ground = require("../objects/ground");
+	var Moon = require("../objects/moon");
+	var Clouds = require("../objects/clouds");
 
 	var Menu = function(title, messages) {
 		this.title = title;
@@ -16,8 +19,21 @@ define(function(require) {
 
 		//music.play("", 0, 1, true);
 
-		//this.game.stage.background = this.game.add.image(0, 0, 'sea');
 		this.game.stage.backgroundColor = "black";
+		this.game.add.image(0, 0, "sky");
+		
+		var moon = new Moon(this.game);
+
+		// add random clouds
+		var clouds = new Clouds(this.game);
+		clouds.set();
+
+		// add the ground
+		var ground = new Ground(this.game);
+		ground.set();
+		ground.stop();
+
+		this.game.add.image(0, 0, "overlay");
 
 		this.titleText = this.game.add.text(this.game.world.centerX, 50, this.title, constants.STYLE_TITLE);
 		this.titleText.anchor.setTo(0.5, 0);

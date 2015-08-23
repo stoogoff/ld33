@@ -12,6 +12,7 @@ define(function(require) {
 		PLAYER_HEIGHT: 120,
 
 		// game constants
+		ENEMY_MAX: 20,
 		FEAR_RANGE: 400,
 		JUMP_SMALL: 275,
 		JUMP_FULL: 400,
@@ -23,9 +24,6 @@ define(function(require) {
 
 		SCORE_KILL: 10,
 		SCORE_FALL: 1,
-
-		// HUD ???
-		BACKGROUND_COLOUR: "rgba(0, 0, 0, 0.9)",
 
 		// font styles
 		STYLE_TITLE: {
@@ -40,7 +38,7 @@ define(function(require) {
 		},
 		STYLE_HUD: {
 			font: "bold 16px Arial",
-			fill: "#114ea7"
+			fill: "#cfcfcf"
 		}
 	};
 });

@@ -6,6 +6,10 @@ define(function(require) {
 	var Huts = require("../objects/huts");
 	var Stages = require("../objects/stages");
 	var Enemies = require("../objects/enemies");
+	var Enemies = require("../objects/enemies");
+	var Splats = require("../objects/splats");
+	var Moon = require("../objects/moon");
+	var Clouds = require("../objects/clouds");
 
 	// util imports
 	var constants = require("../utils/constants");
@@ -13,7 +17,7 @@ define(function(require) {
 	var _ = require("underscore");
 
 	// objects
-	var player, ground, huts, stage, enemies;
+	var player, ground, huts, stage, enemies, splats, moon, clouds;
 
 	// scores
 	var killed = 0, score = 0;
@@ -22,6 +26,7 @@ define(function(require) {
 
 	// camera shake
 	var shake = false, shaker = new Interval(1000);
+	var PAD = 20;
 
 	// keyboard
 	var jump, hit, block;
@@ -33,14 +38,18 @@ define(function(require) {
 	GamePlay.prototype.create = function() {
 		// basic world stuff
 		this.game.stage.backgroundColor = "#05baf0";
-		//this.game.add.tileSprite(0, 0, constants.WORLD_WIDTH, constants.WORLD_HEIGHT, "background");
+		//this.game.add.tileSprite(-PAD, -PAD, constants.SCREEN_WIDTH + PAD, constants.SCREEN_HEIGHT + PAD, "sky");
+		this.game.stage.background = this.game.add.image(0, 0, "sky"); // this needs to be static and not shake with the rest of the screen
 		this.game.physics.startSystem(Phaser.Physics.ARCADE);
 		this.game.physics.arcade.gravity.y = constants.GRAVITY_WORLD;
-		this.game.world.setBounds(-20, -20, constants.SCREEN_WIDTH + 20, constants.SCREEN_HEIGHT + 20);
+		this.game.world.setBounds(-PAD, -PAD, constants.SCREEN_WIDTH + PAD, constants.SCREEN_HEIGHT + PAD);
 
-		// set up the score
-		scoreText = this.game.add.text(constants.SCREEN_WIDTH - 100, 10, scorePrefix + "0", constants.STYLE_HUD);
-		killedText = this.game.add.text(10, 10, killedPrefix + "0", constants.STYLE_HUD);
+		// sky related
+		moon = new Moon(this.game);
+
+		// add random clouds
+		clouds = new Clouds(this.game);
+		clouds.set();
 
 		var z = 0;
 
@@ -66,6 +75,17 @@ define(function(require) {
 		enemies = new Enemies(this.game, undefined, _.bind(this.addScore, this));
 		enemies.z = ++z;
 
+		// blood splats
+		splats = new Splats(this.game);
+		splats.z = ++z;
+
+		// set up the score
+		scoreText = this.game.add.text(constants.SCREEN_WIDTH - 100, constants.SCREEN_HEIGHT - 30, scorePrefix + "0", constants.STYLE_HUD);
+		killedText = this.game.add.text(10, constants.SCREEN_HEIGHT - 30, killedPrefix + "0", constants.STYLE_HUD);
+
+		scoreText.z = ++z;
+		killedText.z = ++z;
+
 		// set up the current stage
 		stage = new Stages.Village();
 
@@ -85,8 +105,8 @@ define(function(require) {
 	};
 
 	GamePlay.prototype.shake = function() {
-		var min = -10;
-		var max = 10;
+		var min = -PAD / 2;
+		var max = PAD / 2;
 
 		this.game.camera.x += Math.floor(Math.random() * (max - min + 1)) + min;
 		this.game.camera.y += Math.floor(Math.random() * (max - min + 1)) + min;
@@ -101,13 +121,13 @@ define(function(require) {
 
 		// collisions between the player and the enemies
 		this.game.physics.arcade.collide(player, enemies, function(player, enemy) {
+			splats.addSplat(enemy.x);
+
+			// TODO enemy needs to squish before adding the splat and before removing it completely
 			enemies.remove(enemy);
 			enemy.destroy();
 
-			// TODO add a splat
 			this.addScore(constants.SCORE_KILL);
-
-
 		}, null, this);
 
 		// STAGE ACTIVITY
@@ -146,6 +166,7 @@ define(function(require) {
 			enemies.faster(constants.SPEED_INCREMENT);
 			ground.faster(constants.SPEED_INCREMENT);
 			huts.faster(constants.SPEED_INCREMENT);
+			splats.faster(constants.SPEED_INCREMENT);
 		}
 
 		// SHAKE CAMERA

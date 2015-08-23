@@ -6,9 +6,11 @@ define(function(require) {
 	var helpers = require("../utils/helpers");
 	var constants = require("../utils/constants");
 
+	// graphics
+	var gfx = ["ground1", "ground1", "ground2", "ground3"];
+
 	var Ground = function(game, x, y) {
-		// phaser related stuff
-		Phaser.Sprite.call(this, game, x, y, "ground");
+		Phaser.Sprite.call(this, game, x, y, Phaser.ArrayUtils.getRandomItem(gfx));
 
 		// set physics and game specific stuff
 		game.physics.arcade.enable(this);
@@ -39,6 +41,7 @@ define(function(require) {
 		}
 	};
 
+	// push the next offscreen tile down so it's off screen leaving a gap in the ground
 	GroundGroup.prototype.createChasm = function() {
 		// this should be offscreen
 		var last = this.getLast();
@@ -46,11 +49,9 @@ define(function(require) {
 		last.y += constants.TILE_HEIGHT;
 	};
 
-	// TODO method for getting the top y position at a given x position
-
 	// override onloop to create seamless ground
 	GroundGroup.prototype.onloop = function(child) {
-		// get last tile and reposition it 
+		// get last tile and reposition child based on it 
 		var last = this.getLast();
 
 		child.x = last.x + constants.TILE_WIDTH;
