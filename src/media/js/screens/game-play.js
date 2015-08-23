@@ -29,7 +29,7 @@ define(function(require) {
 	var PAD = 20;
 
 	// keyboard
-	var jump, hit, block;
+	var jump, smash;
 
 	var GamePlay = function() {
 		Phaser.State.call(this);
@@ -90,9 +90,8 @@ define(function(require) {
 		stage = new Stages.Village();
 
 		// set up player controls
-		jump = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-
-		// TODO the player should walk onto the screen while the ground is motionless
+		jump  = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+		smash = this.game.input.keyboard.addKey(Phaser.Keyboard.X);
 	};
 
 	GamePlay.prototype.addScore = function(newScore) {
@@ -123,9 +122,13 @@ define(function(require) {
 		this.game.physics.arcade.collide(player, enemies, function(player, enemy) {
 			splats.addSplat(enemy.x);
 
-			// TODO enemy needs to squish before adding the splat and before removing it completely
-			enemies.remove(enemy);
-			enemy.destroy();
+			// squish enemy before adding the splat and before removing the enemy completely
+			var tween = this.game.add.tween(enemy).to({ height: 0 }, 180, Phaser.Easing.Bounce.Out, true);
+
+			tween.onComplete.addOnce(function() {
+				enemies.remove(enemy);
+				enemy.destroy();
+			});
 
 			this.addScore(constants.SCORE_KILL);
 		}, null, this);
@@ -144,7 +147,7 @@ define(function(require) {
 		if(stage.addChasm()) {
 			ground.createChasm();
 
-			// TODO select a new stage
+			// TODO select a new stage and speed up
 			stage = new Stages.Village();
 		}
 
@@ -186,6 +189,11 @@ define(function(require) {
 		// handle jump
 		if(jump.isDown) {
 			player.jump();
+		}
+
+		// handle smash!
+		if(smash.isDown) {
+			player.smash();
 		}
 
 		// player has fallen down a chasm

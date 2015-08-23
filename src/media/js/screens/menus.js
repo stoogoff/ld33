@@ -61,7 +61,7 @@ define(function(require) {
 	inherits(Start, Menu);
 
 	var GameOver = function() {
-		Menu.call(this, "Game Over!", ["Troll died <sniff>. Poor Troll.", "Troll sad now.", "But you did kill enough squishy humans to feed Troll for <x> days."]);
+		Menu.call(this, "Game Over!", ["Troll fell down a hole <sniff>. Poor Troll.", "Troll sad now.", "But you did kill enough squishy humans to feed Troll for <x> days."]);
 	};
 
 	inherits(GameOver, Menu);

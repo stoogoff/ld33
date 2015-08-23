@@ -3,16 +3,17 @@ define(function(require) {
 	var inherits = require("../utils/inherits");
 	var constants = require("../utils/constants");
 	var Interval = require("../utils/interval");
+	var _ = require("underscore");
 
 	// jump related
 	var jumpInterval = new Interval(3000);
 	var canPowerJump = true;
-	var Jumping = {
+	var PlayerState = {
 		"None": 0,
 		"Jump": 1,
-		"Power": 2
+		"Power": 2,
+		"Smash": 3
 	};
-	var jumpState = Jumping.None;
 
 	var Player = function(game, x, y, frame) {
 		// phaser related stuff
@@ -27,59 +28,80 @@ define(function(require) {
 		this.body.gravity.y = constants.GRAVITY_PLAYER;
 		this.body.checkCollision.left = false;
 		this.body.checkCollision.right = false;
-		this.anchor.setTo(0.5, 1);
+		this.anchor.setTo(0, 1);
 
-		this.animations.add("idle");
-		this.animations.play("idle", 3, true);
+		this.animations.add("run");
+		this.animations.play("run", 3, true);
+
+		this.actionState = PlayerState.None;
 	};
 
 	inherits(Player, Phaser.Sprite);
 
 	// jump the player and change the animation
 	Player.prototype.jump = function() {
-		if(jumpState != Jumping.None) {
+		if(this.actionState != PlayerState.None) {
 			return;
 		}
 
 		if(canPowerJump) {
-			jumpState = Jumping.Power;
+			this.actionState = PlayerState.Power;
 			this.body.velocity.y = -constants.JUMP_FULL;
 		}
 		else {
-			jumpState = Jumping.Jump;
+			this.actionState = PlayerState.Jump;
 			this.body.velocity.y = -constants.JUMP_SMALL;
 		}
 
-		// TODO revert to jumping animation
+		// change to jumping animation
+		this.loadTexture("troll-jump");
 	};
 
+	// smash whatever is infront of the player
+	Player.prototype.smash = function() {
+		if(this.actionState != PlayerState.None) {
+			return;
+		}
+
+		this.actionState = PlayerState.Smash;
+
+		this.loadTexture("troll-smash");
+		this.animations.add("smash");
+
+		var anim = this.animations.play("smash", 10, false);
+
+		anim.onComplete.add(_.bind(function() {
+			this.loadTexture("troll-run");
+			this.animations.play("run", 3, true);
+
+			this.actionState = PlayerState.None;
+		}, this));
+	};
 
 	Player.prototype.update = function() {
 		// were jumping, have now landed
-		if(jumpState != Jumping.None && this.body.velocity.y == 0) {
-			if(jumpState == Jumping.Power) {
+		if(this.actionState != PlayerState.None && this.actionState != PlayerState.Smash && this.body.velocity.y == 0) {
+			if(this.actionState == PlayerState.Power) {
 				this.onpowerlanding();
 			}
 
-			jumpState = Jumping.None;
+			this.actionState = PlayerState.None;
 			canPowerJump = false;
 			jumpInterval.reset();
 
-			// TODO revert to walking animation
+			// revert to walking animation
+			this.loadTexture("troll-run");
+			this.animations.play("run", 3, true);
 		}
 
 		var elapsed = this.game.time.elapsed;
 
-		if(jumpState == Jumping.None && jumpInterval.next(elapsed)) {
+		if(this.actionState == PlayerState.None && jumpInterval.next(elapsed)) {
 			canPowerJump = true;
 		}
 	};
 
 	Player.prototype.onpowerlanding = function() {};
-
-	Player.prototype.isDead = function() {
-		return false;
-	};
 
 	return Player;
 });

@@ -13,7 +13,7 @@ define(function(require) {
 
 		// game constants
 		ENEMY_MAX: 20,
-		FEAR_RANGE: 400,
+		FEAR_RANGE: 460,
 		JUMP_SMALL: 275,
 		JUMP_FULL: 400,
 		GRAVITY_WORLD: 400,

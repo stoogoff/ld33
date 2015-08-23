@@ -9,7 +9,8 @@ define(function(require) {
 
 		// load graphics
 		var keys = [
-			"troll", "villager", "sky", "overlay", "moon",
+			"troll-jump",
+			"sky", "overlay", "moon",
 			"hut1", "hut2", "hut3",
 			"ground1", "ground2", "ground3",
 			"splat1", "splat2", "splat3",
@@ -29,6 +30,7 @@ define(function(require) {
 
 		this.load.spritesheet("troll-idle", "media/img/troll-idle.png", 120, 120);
 		this.load.spritesheet("troll-run", "media/img/troll-run.png", 120, 120);
+		this.load.spritesheet("troll-smash", "media/img/troll-smash.png", 180, 120);
 
 
 		// load json data

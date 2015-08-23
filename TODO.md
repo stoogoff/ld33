@@ -13,14 +13,15 @@ Troll jump:
 DONE Spawn villagers
 DONE Troll death if fall down chasm
 Troll smash!
+Fix background (and maybe HUD during power smash)
 
 Artwork:
 
 - Troll
 	- DONE Idle
 	- DONE Running
-	- Jumping
-	- Smashing
+	- DONE Jumping
+	- DONE Smashing
 - Villager
 	- Running with colour variations
 		- DONE White

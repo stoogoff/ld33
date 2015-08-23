@@ -21,7 +21,7 @@ define(function(require) {
 		this.body.immovable = true;
 		this.body.friction.x = 0;
 
-		this.interval = new Interval(1000);
+		this.interval = new Interval(500);
 	};
 
 	inherits(Hut, Phaser.Sprite);

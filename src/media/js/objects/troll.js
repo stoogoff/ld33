@@ -10,7 +10,7 @@ define(function(require) {
 		// set physics and game specific stuff
 		game.add.existing(this);
 
-		this.anchor.setTo(0.5, 1);
+		this.anchor.setTo(0, 1);
 
 		// animate
 		this.animations.add("idle");
