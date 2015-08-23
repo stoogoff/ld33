@@ -17,15 +17,23 @@ Troll smash!
 Artwork:
 
 - Troll
-	- Walking
+	- DONE Idle
+	- DONE Running
 	- Jumping
 	- Smashing
 - Villager
-	- Walking with colour variations
+	- Running with colour variations
+		- DONE White
+		- DONE Black
+		- DONE Brown
+		- DONE Yellow
+		- DONE Red
+	- Running with pitchfork and colour variations
 		- White
 		- Black
 		- Brown
 		- Yellow
+		- Red
 	- DONE Splat (3 types)
 - Hut (3 types)
 	- DONE Without chimney

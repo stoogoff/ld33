@@ -21,7 +21,15 @@ define(function(require) {
 		});
 
 		// animations
-		//this.load.spritesheet("alien", "media/img/alien.png", 24, 24);
+		var people = ["black", "brown", "red", "white", "yellow"];
+
+		people.forEach(function(key) {
+			self.load.spritesheet("people-" + key, "media/img/people-" + key + ".png", 24, 32);
+		});
+
+		this.load.spritesheet("troll-idle", "media/img/troll-idle.png", 120, 120);
+		this.load.spritesheet("troll-run", "media/img/troll-run.png", 120, 120);
+
 
 		// load json data
 		//this.load.json("objects", "media/data/objects.json");

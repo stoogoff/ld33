@@ -16,13 +16,11 @@ define(function(require) {
 
 	var Player = function(game, x, y, frame) {
 		// phaser related stuff
-		Phaser.Sprite.call(this, game, x, y, "troll", frame);
+		Phaser.Sprite.call(this, game, x, y, "troll-run", frame);
 
 		// set physics and game specific stuff
 		game.physics.arcade.enable(this);
 		game.add.existing(this);
-
-		//this.animations.add("walk", null, 10);
 
 		this.body.allowRotation = false;
 		this.body.collideWorldBounds = false;
@@ -30,6 +28,9 @@ define(function(require) {
 		this.body.checkCollision.left = false;
 		this.body.checkCollision.right = false;
 		this.anchor.setTo(0.5, 1);
+
+		this.animations.add("idle");
+		this.animations.play("idle", 3, true);
 	};
 
 	inherits(Player, Phaser.Sprite);

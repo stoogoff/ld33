@@ -5,6 +5,7 @@ define(function(require) {
 	var Ground = require("../objects/ground");
 	var Moon = require("../objects/moon");
 	var Clouds = require("../objects/clouds");
+	var Troll = require("../objects/troll");
 
 	var Menu = function(title, messages) {
 		this.title = title;
@@ -33,6 +34,9 @@ define(function(require) {
 		ground.set();
 		ground.stop();
 
+		// add the idle troll animation
+		var troll = new Troll(this.game, constants.TILE_WIDTH, constants.SCREEN_HEIGHT - constants.TILE_HEIGHT / 2);
+
 		this.game.add.image(0, 0, "overlay");
 
 		this.titleText = this.game.add.text(this.game.world.centerX, 50, this.title, constants.STYLE_TITLE);
@@ -57,7 +61,7 @@ define(function(require) {
 	inherits(Start, Menu);
 
 	var GameOver = function() {
-		Menu.call(this, "Game Over!", ["Troll died <sniff>", "Poor Troll", "Troll sad now"]);
+		Menu.call(this, "Game Over!", ["Troll died <sniff>. Poor Troll.", "Troll sad now.", "But you did kill enough squishy humans to feed Troll for <x> days."]);
 	};
 
 	inherits(GameOver, Menu);

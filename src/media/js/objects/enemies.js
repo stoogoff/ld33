@@ -6,9 +6,12 @@ define(function(require) {
 	var constants = require("../utils/constants");
 	var Parallax = require("./parallax");
 
+	// graphics
+	var gfx = ["black", "brown", "red", "white", "yellow"];
+
 	var Villager = function(game, x, y) {
 		// phaser related stuff
-		Phaser.Sprite.call(this, game, x, y, "villager");
+		Phaser.Sprite.call(this, game, x, y, "people-" + Phaser.ArrayUtils.getRandomItem(gfx));
 
 		// set physics and game specific stuff
 		game.physics.arcade.enable(this);
@@ -18,6 +21,10 @@ define(function(require) {
 		this.body.allowGravity = true;
 		this.body.allowRotation = false;
 		this.body.immovable = false;
+
+		// aniamte
+		this.animations.add("run");
+		this.animations.play("run", 5, true);
 
 		this.speed = game.rnd.integerInRange(1, 8);
 	};
