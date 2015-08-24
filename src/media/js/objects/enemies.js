@@ -82,7 +82,7 @@ define(function(require) {
 				// the enemy is within the screen width so the death was by falling
 				// Troll gets a small score
 				if(child.x > 0 && child.x < constants.SCREEN_WIDTH) {
-					this.updateScore(constants.SCORE_FALL);
+					//this.updateScore(constants.SCORE_FALL);
 				}
 
 				this.remove(child);
