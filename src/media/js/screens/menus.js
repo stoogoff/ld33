@@ -17,7 +17,6 @@ define(function(require) {
 	Menu.prototype.create = function() {
 		// start music
 		this.music = this.game.add.audio("intro", 1, true);
-		//this.music.fadeIn(constants.MUSIC_FADE, true);
 		this.music.play("", 0, 1, true);
 
 		this.game.stage.backgroundColor = "black";
@@ -39,13 +38,13 @@ define(function(require) {
 
 		this.game.add.image(0, 0, "overlay");
 
-		this.titleText = this.game.add.text(this.game.world.centerX, 50, this.title, constants.STYLE_TITLE);
+		this.titleText = this.game.add.text(this.game.world.centerX, 20, this.title, constants.STYLE_TITLE);
 		this.titleText.anchor.setTo(0.5, 0);
 
-		this.infoText = this.game.add.text(this.game.world.centerX, 150, this.messages.join("\n\n"), constants.STYLE_BODY);
+		this.infoText = this.game.add.text(this.game.world.centerX, 100, this.messages.join("\n\n"), constants.STYLE_BODY);
 		this.infoText.anchor.setTo(0.5, 0);
 		this.infoText.wordWrap = true;
-		this.infoText.wordWrapWidth = 500;
+		this.infoText.wordWrapWidth = 400;
 	};
 	
 	Menu.prototype.update = function() {
@@ -55,22 +54,24 @@ define(function(require) {
 	};
 
 	Menu.prototype.shutdown = function() {
-		console.log("Menu.shutdown")
-		//this.music.fadeOut(constants.MUSIC_FADE);
 		this.music.stop();
 	};
 
 	var Start = function() {
-		Menu.call(this, "Trollhammer", ["Get ready", "Game info"]);
+		Menu.call(this, "Trollhammer", ["Troll need food! Smash squishy humans with hammer or jump on soft heads.", "X - Smash\nSpacebar - Jump", "Click anywhere to start"]);
 	};
 
 	inherits(Start, Menu);
 
 	var GameOver = function() {
-		Menu.call(this, "Game Over!", ["Troll fell down a hole <sniff>. Poor Troll.", "Troll sad now.", "But you did kill enough squishy humans to feed Troll for <x> days."]);
+		Menu.call(this, "Game Over!", ["Troll fell down a hole <sniff>. Poor Troll.", "Troll sad now.", "But you did kill enough squishy humans to feed Troll for $ days.", "Click anywhere to play again"]);
 	};
 
 	inherits(GameOver, Menu);
+
+	GameOver.prototype.init = function(score, killed) {
+		this.messages[this.messages.length - 2] = this.messages[this.messages.length - 2].replace("$", Math.floor(killed / 5));
+	};
 
 	return {
 		"Start": Start,

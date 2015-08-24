@@ -4,6 +4,7 @@ define(function(require) {
 	var inherits = require("../utils/inherits");
 	var helpers = require("../utils/helpers");
 	var constants = require("../utils/constants");
+	var helpers = require("../utils/helpers");
 
 	// parallax scrolling
 	var Parallax = function(game, parent) {
@@ -17,7 +18,7 @@ define(function(require) {
 
 	// increase speed
 	Parallax.prototype.faster = function(adjust) {
-		this.speed += adjust;
+		this.speed = helpers.clamp(this.speed + adjust, 0, 1500);
 	};
 
 	Parallax.prototype.stop = function() {

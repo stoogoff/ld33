@@ -30,6 +30,8 @@ define(function(require) {
 	// groups the aliens together
 	var CloudGroup = function(game, parent) {
 		Parallax.call(this, game, parent);
+
+		this.fixedToCamera = true;
 	};
 
 	inherits(CloudGroup, Parallax);

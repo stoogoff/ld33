@@ -19,7 +19,7 @@ define(function(require) {
 		GRAVITY_WORLD: 400,
 		GRAVITY_PLAYER: 400,
 
-		SPEED_START: 180,
+		SPEED_START: 200,
 		SPEED_INCREMENT: 40,
 
 		SCORE_KILL: 10,
@@ -31,7 +31,9 @@ define(function(require) {
 		STYLE_TITLE: {
 			font: "65px Arial",
 			fill: "#ffffff",
-			align: "center"
+			align: "center",
+			stroke: "black",
+			strokeThickness: 2
 		},
 		STYLE_BODY: {
 			font: "16px Arial",

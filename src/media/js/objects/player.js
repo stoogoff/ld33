@@ -8,6 +8,9 @@ define(function(require) {
 	// hammer area
 	var HAMMER_SIZE = 20;
 
+	// sfx
+	var sfx = {};
+
 	// jump related
 	var jumpInterval = new Interval(3000);
 	var canPowerJump = true;
@@ -15,7 +18,9 @@ define(function(require) {
 		"None": 0,
 		"Jump": 1,
 		"Power": 2,
-		"Smash": 3
+		"Smashing": 3, // start of the smashing animation
+		"Smash": 4,    // the hit
+		"Smashed": 5   // end of the smashing animation
 	};
 
 	var Player = function(game, x, y, frame) {
@@ -33,8 +38,14 @@ define(function(require) {
 		this.body.checkCollision.right = false;
 		this.anchor.setTo(0, 1);
 
+		// animations
 		this.animations.add("run");
 		this.animations.play("run", 3, true);
+
+		// sfx
+		sfx["jump-land"] = this.game.add.audio("jump-land");
+		sfx["power-jump-land"] = this.game.add.audio("power-jump-land");
+		sfx["smash"] = this.game.add.audio("smash");
 
 		this.actionState = PlayerState.None;
 	};
@@ -66,13 +77,24 @@ define(function(require) {
 			return;
 		}
 
-		this.actionState = PlayerState.Smash;
+		this.actionState = PlayerState.Smashing;
 
 		this.loadTexture("troll-smash");
 		this.animations.add("smash");
 
 		var anim = this.animations.play("smash", 10, false);
+		anim.enableUpdate = true;
 
+		anim.onUpdate.add(_.bind(function(animation, frame) {
+			if(frame.index == 4) {
+				sfx["smash"].play();
+				this.actionState = PlayerState.Smash;
+			}
+			else if(frame.index > 4) {
+				this.actionState = PlayerState.Smashed;
+			}
+
+		}, this));
 		anim.onComplete.add(_.bind(function() {
 			this.loadTexture("troll-run");
 			this.animations.play("run", 3, true);
@@ -91,9 +113,13 @@ define(function(require) {
 
 	Player.prototype.update = function() {
 		// were jumping, have now landed
-		if(this.actionState != PlayerState.None && this.actionState != PlayerState.Smash && this.body.velocity.y == 0) {
+		if((this.actionState == PlayerState.Jump || this.actionState == PlayerState.Power) && this.body.velocity.y == 0) {
 			if(this.actionState == PlayerState.Power) {
+				sfx["power-jump-land"].play();
 				this.onpowerlanding();
+			}
+			else {
+				sfx["jump-land"].play();
 			}
 
 			this.actionState = PlayerState.None;

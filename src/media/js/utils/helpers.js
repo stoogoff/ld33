@@ -3,6 +3,18 @@ define(function(require) {
 	var constants = require("./constants");
 
 	return {
+		clamp: function(num, min, max) {
+			if(num < min) {
+				return min;
+			}
+
+			if(num > max) {
+				return max;
+			}
+
+			return num;
+		},
+
 		// get a random point on the game world
 		getRandomPoint: function(game, point, offset) {
 			if(point) {

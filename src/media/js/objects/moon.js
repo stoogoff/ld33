@@ -9,6 +9,7 @@ define(function(require) {
 		game.add.existing(this);
 
 		this.alpha = 0.5;
+		this.fixedToCamera = true;
 	};
 
 	inherits(Moon, Phaser.Image);

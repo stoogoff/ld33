@@ -17,7 +17,11 @@ define(function(require) {
 	var _ = require("underscore");
 
 	// objects
-	var player, ground, huts, stage, enemies, splats, moon, clouds;
+	var player, ground, huts, enemies, splats, moon, clouds;
+
+	// stage related
+	var stage;
+	var stages = ["Village"/*, "Terrain"*/]; // currently available stages
 
 	// scores
 	var killed = 0, score = 0;
@@ -41,13 +45,12 @@ define(function(require) {
 	GamePlay.prototype.create = function() {
 		// start music
 		music = this.game.add.audio("theme", 1, true);
-		//music.fadeIn(constants.MUSIC_FADE, true);
 		music.play("", 0, 1, true);
 
 		// basic world stuff
 		this.game.stage.backgroundColor = "#05baf0";
-		//this.game.add.tileSprite(-PAD, -PAD, constants.SCREEN_WIDTH + PAD, constants.SCREEN_HEIGHT + PAD, "sky");
 		this.game.stage.background = this.game.add.image(0, 0, "sky"); // this needs to be static and not shake with the rest of the screen
+		this.game.stage.background.fixedToCamera = true;
 		this.game.physics.startSystem(Phaser.Physics.ARCADE);
 		this.game.physics.arcade.gravity.y = constants.GRAVITY_WORLD;
 		this.game.world.setBounds(-PAD, -PAD, constants.SCREEN_WIDTH + PAD, constants.SCREEN_HEIGHT + PAD);
@@ -96,7 +99,7 @@ define(function(require) {
 
 		// set up the current stage
 		stage = new Stages.Village();
-		//stage = new Stages.Empty();
+		//stage = new Stages.Terrain();
 
 		// set up player controls
 		jump  = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -144,16 +147,21 @@ define(function(require) {
 
 		// add hut offscreen
 		if(stage.addHut()) {
-			huts.addHut(constants.SCREEN_WIDTH + 5 /* offset */, constants.SCREEN_HEIGHT - constants.TILE_HEIGHT / 2);
+			var x = constants.SCREEN_WIDTH + 5; // offset
+
+			if(!ground.isChasmAtX(x)) {
+				huts.addHut(x, constants.SCREEN_HEIGHT - constants.TILE_HEIGHT / 2);
+			}
 		}
 
 		// adding a chasm signifies the end of the stage
 		if(stage.addChasm()) {
 			ground.createChasm();
-
-			// TODO select a new stage and speed up
-			stage = new Stages.Village();
 		}
+
+		/*if(stage.addLedge()) {
+			ground.createLedge();
+		}*/
 
 		var addedEnemy = false;
 
@@ -167,6 +175,16 @@ define(function(require) {
 				}
 			}
 		}, this, true);
+
+		if(stage.finished) {
+			// select a new stage and speed up
+			var nextStage = Phaser.ArrayUtils.getRandomItem(stages);
+
+			console.log(ground.speed)
+
+			stage = new Stages[nextStage](ground.speed);
+			this.speedUp();
+		}
 
 		// stage wasn't started but now is and an enemy has been added, so increase the player speed
 		if(!stageStarted && stage.started && addedEnemy) {
@@ -199,7 +217,7 @@ define(function(require) {
 
 		// player has fallen down a chasm
 		if(player.y > constants.SCREEN_HEIGHT) {
-			this.game.state.start("gameover");
+			this.game.state.start("gameover", true, false, score, killed);
 		}
 	};
 
@@ -222,13 +240,7 @@ define(function(require) {
 	};
 
 	GamePlay.prototype.shutdown = function() {
-		console.log("GamePlay.shutdown")
-		//music.fadeOut(constants.MUSIC_FADE);
 		music.stop();
-	};
-
-	GamePlay.prototype.render = function() {
-		//this.game.debug.cameraInfo(this.game.camera, 32, 32);
 	};
 
 	return GamePlay;

@@ -10,6 +10,10 @@ define(function(require) {
 	// graphics
 	var gfx = ["black", "brown", "red", "white", "yellow"];
 
+	// sfx
+	var sfx = ["scream1", "scream2", "scream3"];
+	var playable = {};
+
 	var Villager = function(game, x, y) {
 		// phaser related stuff
 		Phaser.Sprite.call(this, game, x, y, "people-" + Phaser.ArrayUtils.getRandomItem(gfx));
@@ -23,9 +27,14 @@ define(function(require) {
 		this.body.allowRotation = false;
 		this.body.immovable = false;
 
-		// aniamte
+		// animations
 		this.animations.add("run");
 		this.animations.play("run", 5, true);
+
+		// sound effects
+		sfx.forEach(_.bind(function(key) {
+			playable[key] = this.game.add.audio(key);
+		}, this));
 
 		this.speed = game.rnd.integerInRange(1, 8);
 	};
@@ -39,6 +48,8 @@ define(function(require) {
 		tween.onComplete.addOnce(_.bind(function() {
 			complete(this);
 			this.destroy();
+
+			playable[Phaser.ArrayUtils.getRandomItem(sfx)].play();
 		}, this));
 	};
 

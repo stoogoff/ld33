@@ -32,9 +32,16 @@ define(function(require) {
 		this.load.spritesheet("troll-run", "media/img/troll-run.png", 120, 120);
 		this.load.spritesheet("troll-smash", "media/img/troll-smash.png", 180, 120);
 
-		// load audio
+		// load music
 		this.load.audio("intro", ["media/audio/for-whom-the-bell-trolls.mp3", "media/audio/for-whom-the-bell-trolls.ogg"]);
 		this.load.audio("theme", ["media/audio/hammer-troll.mp3", "media/audio/hammer-troll.ogg"]);
+
+		// load sound effects
+		var sfx = ["jump-land", "power-jump-land", "smash", "scream1", "scream2", "scream3"];
+
+		sfx.forEach(function(key) {
+			self.load.audio(key, ["media/audio/" + key + ".wav"]);
+		});
 	};
 	
 	Preload.prototype.create = function() {
